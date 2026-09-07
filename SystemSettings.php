@@ -242,11 +242,11 @@ class SystemSettings extends \Piwik\Settings\Plugin\SystemSettings
     private function createRedisUsernameSetting()
     {
         return $this->makeSetting('redisUsername', $default = '', FieldConfig::TYPE_STRING, function (FieldConfig $field) {
-            $field->title = 'Redis Username';
+            $field->title = Piwik::translate('QueuedTracking_RedisUsernameFieldTitle');
             $field->condition = 'backend=="redis"';
             $field->uiControl = FieldConfig::UI_CONTROL_TEXT;
             $field->uiControlAttributes = array('size' => 128);
-            $field->inlineHelp = 'Username for Redis ACL authentication. Leave empty if not used.';
+            $field->inlineHelp = Piwik::translate('QueuedTracking_RedisUsernameFieldHelp');
             $field->validators[] = new CharacterLength(null, 128);
         });
     }

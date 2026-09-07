@@ -265,7 +265,7 @@ end';
         $success = $this->redis->connect($this->host, $this->port, $this->timeout, null, 100);
 
         if ($success && !empty($this->password)) {
-            $success = $this->redis->auth($this->password, $this->username);
+            $success = $this->redis->auth([$this->username, $this->password]);
         }
 
         if (!empty($this->database) || 0 === $this->database) {
