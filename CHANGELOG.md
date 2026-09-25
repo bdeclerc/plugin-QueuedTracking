@@ -1,5 +1,11 @@
 ## Changelog
 
+6.0.1 - 2026-09-21
+- Fixed the Redis cluster backend reporting a fatal error instead of the configuration problem when the configured hosts and ports do not match, or when the cluster cannot be reached
+
+6.0.0 - 2026-08-09
+- Compatibility with Matomo 6
+
 5.2.0 - 2025-11-25
 - No longer disable Provider plugin automatically. If performance issues occur, please disable it manually or install an ASN geolocation database (https://matomo.org/faq/how-to/setting-up-accurate-visitors-geolocation/).
 
