@@ -1,5 +1,9 @@
 ## Changelog
 
+Unreleased
+- Added a Redis username setting for ACL authentication, used by the stand-alone, Sentinel and Cluster backends
+- Updated the bundled credis library
+
 6.0.1 - 2026-09-21
 - Fixed the Redis cluster backend reporting a fatal error instead of the configuration problem when the configured hosts and ports do not match, or when the cluster cannot be reached
 
