@@ -347,35 +347,47 @@ class RedisTest extends IntegrationTestCase
     private function createRedisPassword($password, $username = null)
     {
         if (!empty($username)) {
-            $this->createAdminConnection()->rawcommand('ACL', 'SETUSER', $username, 'on', '>' . $password, '~*', '&*', '+@all');
+            $this->createAdminConnection()->rawCommand('ACL', 'SETUSER', $username, 'on', '>' . $password, '~*', '&*', '+@all');
         } else {
-            $this->createAdminConnection()->rawcommand('CONFIG', 'SET', 'requirepass', $password);
+            $this->createAdminConnection()->rawCommand('CONFIG', 'SET', 'requirepass', $password);
         }
     }
 
     private function removeRedisPassword($username = null, $requirepass = null): void
     {
         if (empty($username)) {
-            $this->createAdminConnection($requirepass)->rawcommand('CONFIG', 'SET', 'requirepass', '');
+            $this->createAdminConnection($requirepass)->rawCommand('CONFIG', 'SET', 'requirepass', '');
         } else {
             $this->createAdminConnection()->rawCommand('ACL', 'DELUSER', $username);
         }
     }
 
     /**
-     * Admin connection used only to set up/tear down auth state for these tests. This must
-     * always target the real Redis master directly (127.0.0.1:6379) and not sentinel.
+     * Admin connection used only to set up/tear down auth state for these tests. It must
+     * always target the real Redis master directly, never a sentinel.
      */
     private function createAdminConnection($requirepass = null)
     {
+        [$host, $port] = $this->getRedisMasterHostAndPort();
+
         $connection = new \Redis();
-        $connection->connect('127.0.0.1', 6379, 0.2);
+        $connection->connect($host, $port, 0.2);
 
         if (!empty($requirepass)) {
             $connection->auth($requirepass);
         }
 
         return $connection;
+    }
+
+    /**
+     * @return array{0: string, 1: int}
+     */
+    protected function getRedisMasterHostAndPort(): array
+    {
+        $settings = Factory::getSettings();
+
+        return [$settings->redisHost->getValue(), (int) $settings->redisPort->getValue()];
     }
 
     public function test_checkConnectionDetails_shouldNotFailIfConnectionDataIsCorrect()

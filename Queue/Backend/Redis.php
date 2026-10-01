@@ -263,8 +263,9 @@ end';
         $this->redis = new \Redis();
         $success = $this->redis->connect($this->host, $this->port, $this->timeout, null, 100);
 
+        $auth = $this->username ? [$this->username, $this->password] : $this->password;
         if ($success && !empty($this->password)) {
-            $success = $this->redis->auth([$this->username, $this->password]);
+            $success = $this->redis->auth($auth);
         }
 
         if (!empty($this->database) || 0 === $this->database) {

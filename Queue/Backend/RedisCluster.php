@@ -308,8 +308,10 @@ end';
 
         $hostsPorts = array_map(fn($host, $port): string => "$host:$port", $hosts, $ports);
 
+        $auth = $this->username ? [$this->username, $this->password] : $this->password;
+
         try {
-            $this->redis = new \RedisCluster(null, $hostsPorts, $this->timeout, $this->timeout, true, $this->password);
+            $this->redis = new \RedisCluster(null, $hostsPorts, $this->timeout, $this->timeout, true, $auth);
             return true;
         } catch (Exception $e) {
             throw new Exception('Could not connect to redis cluster: ' . $e->getMessage());
@@ -322,7 +324,7 @@ end';
         $timeout,
         #[\SensitiveParameter]
         $password,
-        $username = null,
+        $username = null
     ) {
         $this->disconnect();
 
